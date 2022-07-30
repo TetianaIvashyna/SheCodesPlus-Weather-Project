@@ -1,0 +1,39 @@
+.container {
+    width: 70%;
+    margin: 0 auto;
+    font-family: 'Open Sans', sans-serif;
+
+}
+
+.current-weather {
+    padding: 20px;
+}
+
+.header {
+    margin-top: 50px;
+}
+
+.right-degree {
+    position: relative;
+    top: -5px;
+    right: 0;
+    padding: 3px 5px;
+    text-align: right;
+}
+
+.bigWeather {
+    font-size: 84px;
+}
+
+.temperature-future {
+    font-size: 36px;
+}
+
+.center-align {
+    text-align: center;
+}
+
+.right-align {
+
+    text-align: right;
+}
