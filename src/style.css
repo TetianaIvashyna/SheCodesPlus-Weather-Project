@@ -37,3 +37,10 @@
 
     text-align: right;
 }
+
+.footnote {
+    margin: 0 auto;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: small;
+}
