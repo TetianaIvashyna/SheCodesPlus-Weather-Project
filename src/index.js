@@ -60,15 +60,20 @@ function setDateTime() {
 
 //Display Real Weather functions
 
-function displayRealCityTemperature(valueTemp) {
-    // displays temperature in Celsius or in Fahrengeit depending on radiobox state
-    tempCelsiusFloat = valueTemp;
+function temperatureUnitConversion(valueTemp) {
     let temp = 0;
     if (radioCelsius.checked) {
         temp = getCelsius(valueTemp);
     } else {
         temp = getFahrengeit(valueTemp);
     }
+    return temp;
+}
+
+function displayRealCityTemperature(valueTemp) {
+    // displays temperature in Celsius or in Fahrengeit depending on radiobox state
+    tempCelsiusFloat = valueTemp;
+    let temp = temperatureUnitConversion(valueTemp);
     temperature.innerHTML = `${temp}&deg;`;
 }
 
@@ -99,11 +104,18 @@ function displayHumidity(humidity) {
     humiditySpan.innerHTML = `${humidity}`;
 }
 
+function formateDay(timestamp) {
+    let date = new Date(timestamp * 1000);
+    let day = date.getDay();
+
+    return days[day];
+}
+
 function displayForecast(response) {
     // displays Weather forecast for five days given response from API
     let forecastElement = document.querySelector("#forecast");
     let forecastHTML = ``;
-    let days5 = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"];
+    // let days5 = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"];
     let maxTemp = 0;
     let minTemp = 0;
     let iconUrl = ``;
@@ -113,16 +125,18 @@ function displayForecast(response) {
     console.log(response);
 
     [0, 1, 2, 3, 4].forEach(function (day) {
-        maxTemp = response.data.daily[day].temp.max;
-        minTemp = response.data.daily[day].temp.min;
+        maxTemp = temperatureUnitConversion(response.data.daily[day].temp.max);
+        minTemp = temperatureUnitConversion(response.data.daily[day].temp.min);
         icon = response.data.daily[day].weather[0].icon;
         iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
         alt = response.data.daily[day].weather[0].description;
+        timestamp = response.data.daily[day].dt;
+
         forecastHTML = forecastHTML + `            
     <div class="col">
                 <div class="card">
                     <div class="card-body center-align">
-                        <h5 class="card-title forecast-day">${days5[day]}</h5>
+                        <h5 class="card-title forecast-day">${formateDay(timestamp)}</h5>
                         <img id="clouds" src=${iconUrl} alt=${alt}>
                         <p class="card-text temperature-future">
                             <span class="max-forecast-temperature">${maxTemp}&deg;</span> <span
