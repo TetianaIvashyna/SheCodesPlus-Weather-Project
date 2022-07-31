@@ -1,5 +1,9 @@
 // Global variables that are used inside functions
-let tempCelsiusFloat = null;
+let tempCelsiusFloat = {
+    current: 0,
+    forecast: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+};
+let helperArray = ["#max-forecast-temperature", "#min-forecast-temperature"];
 const apiKey = `1522ee297bdb323556a6c95f3b521f77`;
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let temperature = document.querySelector("#temperature");
@@ -18,14 +22,30 @@ function getFahrengeit(tempCelsius) {
 
 function switchToCelcius() {
     // displays Celsius temperature
-    let tempCelsius = getCelsius(tempCelsiusFloat);
+    let tempCelsius = getCelsius(tempCelsiusFloat.current);
     temperature.innerHTML = `${tempCelsius}&deg;`;
+    let forecastTemperatures = [];
+    [0, 1].forEach(function (item) {
+        forecastTemperatures = document.querySelectorAll(helperArray[item]);
+        [0, 1, 2, 3, 4].forEach(function (note) {
+            tempCelsius = getCelsius(tempCelsiusFloat.forecast[note][item]);
+            forecastTemperatures[note].innerHTML = `${tempCelsius}&deg;`;
+        });
+    });
 }
 
 function switchToFahrengeit() {
     // displays Fahrengeit temperature
-    let tempFahrengeit = getFahrengeit(tempCelsiusFloat);
+    let tempFahrengeit = getFahrengeit(tempCelsiusFloat.current);
     temperature.innerHTML = `${tempFahrengeit}&deg;`;
+    let forecastTemperatures = [];
+    [0, 1].forEach(function (item) {
+        forecastTemperatures = document.querySelectorAll(helperArray[item]);
+        [0, 1, 2, 3, 4].forEach(function (note) {
+            tempFahrengeit = getFahrengeit(tempCelsiusFloat.forecast[note][item]);
+            forecastTemperatures[note].innerHTML = `${tempFahrengeit}&deg;`;
+        });
+    });
 }
 
 // Date and Time functions
@@ -72,7 +92,7 @@ function temperatureUnitConversion(valueTemp) {
 
 function displayRealCityTemperature(valueTemp) {
     // displays temperature in Celsius or in Fahrengeit depending on radiobox state
-    tempCelsiusFloat = valueTemp;
+    tempCelsiusFloat.current = valueTemp;
     let temp = temperatureUnitConversion(valueTemp);
     temperature.innerHTML = `${temp}&deg;`;
 }
@@ -122,8 +142,6 @@ function displayForecast(response) {
     let icon = ``;
     let alt = ``;
 
-    console.log(response);
-
     [0, 1, 2, 3, 4].forEach(function (day) {
         maxTemp = temperatureUnitConversion(response.data.daily[day].temp.max);
         minTemp = temperatureUnitConversion(response.data.daily[day].temp.min);
@@ -131,7 +149,8 @@ function displayForecast(response) {
         iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
         alt = response.data.daily[day].weather[0].description;
         timestamp = response.data.daily[day].dt;
-
+        tempCelsiusFloat.forecast[day][0] = response.data.daily[day].temp.max;
+        tempCelsiusFloat.forecast[day][1] = response.data.daily[day].temp.min;
         forecastHTML = forecastHTML + `            
     <div class="col">
                 <div class="card">
@@ -139,8 +158,8 @@ function displayForecast(response) {
                         <h5 class="card-title forecast-day">${formateDay(timestamp)}</h5>
                         <img id="clouds" src=${iconUrl} alt=${alt}>
                         <p class="card-text temperature-future">
-                            <span class="max-forecast-temperature">${maxTemp}&deg;</span> <span
-                                class="min-forecast-temperature">${minTemp}&deg;</span>
+                            <span class="max-forecast-temperature" id="max-forecast-temperature">${maxTemp}&deg;</span> <span
+                                class="min-forecast-temperature" id="min-forecast-temperature">${minTemp}&deg;</span>
                         </p>
 
                     </div>
@@ -149,6 +168,7 @@ function displayForecast(response) {
     `;
     });
 
+    console.log(tempCelsiusFloat);
     forecastElement.innerHTML = forecastHTML;
 }
 
@@ -275,6 +295,5 @@ radioFahrengeit.addEventListener("click", switchToFahrengeit.bind(null, tempCels
 
 // Default
 
-//displayCurrentLocationWeather();
 setDateTime();
 displayCityWeather("Kharkiv");
