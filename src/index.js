@@ -1,8 +1,6 @@
 // Global variables that are used inside functions
 let tempCelsiusFloat = null;
 const apiKey = "1522ee297bdb323556a6c95f3b521f77";
-let radioCelsius = document.querySelector("#inlineRadio1");
-let radioFahrengeit = document.querySelector("#inlineRadio2");
 let temperature = document.querySelector("#temperature");
 
 //Celsius-Fahrenheit functions
@@ -204,6 +202,8 @@ let citySearch = document.querySelector("#citySearch");
 citySearch.addEventListener("submit", displayCity);
 
 //Celsius-Fahrenheit 
+let radioCelsius = document.querySelector("#inlineRadio1");
+let radioFahrengeit = document.querySelector("#inlineRadio2");
 radioCelsius.addEventListener("click", switchToCelcius.bind(null, tempCelsiusFloat));
 radioFahrengeit.addEventListener("click", switchToFahrengeit.bind(null, tempCelsiusFloat));
 
