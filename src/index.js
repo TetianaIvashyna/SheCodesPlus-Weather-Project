@@ -48,6 +48,17 @@ function switchToFahrengeit() {
     });
 }
 
+function temperatureUnitConversion(valueTemp) {
+    // converts temperature to Celsius or to Fahrengeit depending on the state of the radiobox
+    let temp = 0;
+    if (radioCelsius.checked) {
+        temp = getCelsius(valueTemp);
+    } else {
+        temp = getFahrengeit(valueTemp);
+    }
+    return temp;
+}
+
 // Date and Time functions
 function makeDate(now) {
     // makes Date string 
@@ -79,16 +90,6 @@ function setDateTime() {
 }
 
 //Display Real Weather functions
-
-function temperatureUnitConversion(valueTemp) {
-    let temp = 0;
-    if (radioCelsius.checked) {
-        temp = getCelsius(valueTemp);
-    } else {
-        temp = getFahrengeit(valueTemp);
-    }
-    return temp;
-}
 
 function displayRealCityTemperature(valueTemp) {
     // displays temperature in Celsius or in Fahrengeit depending on radiobox state
@@ -125,6 +126,7 @@ function displayHumidity(humidity) {
 }
 
 function formateDay(timestamp) {
+    // formats day of the week for forecast part
     let date = new Date(timestamp * 1000);
     let day = date.getDay();
 
@@ -135,7 +137,6 @@ function displayForecast(response) {
     // displays Weather forecast for five days given response from API
     let forecastElement = document.querySelector("#forecast");
     let forecastHTML = ``;
-    // let days5 = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"];
     let maxTemp = 0;
     let minTemp = 0;
     let iconUrl = ``;
@@ -167,8 +168,6 @@ function displayForecast(response) {
             </div>
     `;
     });
-
-    console.log(tempCelsiusFloat);
     forecastElement.innerHTML = forecastHTML;
 }
 
@@ -196,10 +195,6 @@ function setRealCityWeather(city) {
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     axios.get(apiUrl).then(displayWeather);
 }
-
-// function setRealFiveDayWeather(city, apiKey) {
-
-// }
 
 //City Name Search functions
 
@@ -248,7 +243,6 @@ function displayCity(event) {
     event.preventDefault();
     let cityInput = document.querySelector("#cityInput");
     let city = getTitleCase(cityInput.value);
-    console.log(city);
     cityInput.value = "";
     setDateTime();
     displayCityWeather(city);
