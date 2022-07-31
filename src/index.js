@@ -1,6 +1,6 @@
 // Global variables that are used inside functions
 let tempCelsiusFloat = null;
-const apiKey = "1522ee297bdb323556a6c95f3b521f77";
+const apiKey = `1522ee297bdb323556a6c95f3b521f77`;
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let temperature = document.querySelector("#temperature");
 
@@ -99,6 +99,51 @@ function displayHumidity(humidity) {
     humiditySpan.innerHTML = `${humidity}`;
 }
 
+function displayForecast(response) {
+    // displays Weather forecast for five days given response from API
+    let forecastElement = document.querySelector("#forecast");
+    let forecastHTML = ``;
+    let days5 = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"];
+    let maxTemp = 0;
+    let minTemp = 0;
+    let iconUrl = ``;
+    let icon = ``;
+    let alt = ``;
+
+    console.log(response);
+
+    [0, 1, 2, 3, 4].forEach(function (day) {
+        maxTemp = response.data.daily[day].temp.max;
+        minTemp = response.data.daily[day].temp.min;
+        icon = response.data.daily[day].weather[0].icon;
+        iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+        alt = response.data.daily[day].weather[0].description;
+        forecastHTML = forecastHTML + `            
+    <div class="col">
+                <div class="card">
+                    <div class="card-body center-align">
+                        <h5 class="card-title forecast-day">${days5[day]}</h5>
+                        <img id="clouds" src=${iconUrl} alt=${alt}>
+                        <p class="card-text temperature-future">
+                            <span class="max-forecast-temperature">${maxTemp}&deg;</span> <span
+                                class="min-forecast-temperature">${minTemp}&deg;</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+    `;
+    });
+
+    forecastElement.innerHTML = forecastHTML;
+}
+
+function makeForecast(lat, lon) {
+    // asks API data of the forecast for 5 days given coordinates
+    let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(displayForecast);
+}
+
 function displayWeather(response) {
     // calls display functions for temperature, visibility, wind speed, weather, humidity
     displayRealCityTemperature(response.data.main.temp);
@@ -106,6 +151,10 @@ function displayWeather(response) {
     displayWind(response.data.wind.speed);
     displayClouds(response.data.weather[0]);
     displayHumidity(response.data.main.humidity);
+
+    let lat = response.data.coord.lat;
+    let lon = response.data.coord.lon;
+    makeForecast(lat, lon);
 }
 
 function setRealCityWeather(city) {
@@ -153,35 +202,6 @@ function setCityTitle(city) {
     cityName.innerHTML = city;
 }
 
-
-
-function displayForecast() {
-    let forecastElement = document.querySelector("#forecast");
-    let forecastHTML = ``;
-    let days5 = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"];
-
-    days5.forEach(function (day) {
-
-        forecastHTML = forecastHTML + `            
-    <div class="col">
-                <div class="card">
-                    <div class="card-body center-align">
-                        <h5 class="card-title forecast-day">${day}</h5>
-                        <img id="clouds" src="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
-                        <p class="card-text temperature-future">
-                            <span class="max-forecast-temperature">19&deg;</span> <span
-                                class="min-forecast-temperature">19&deg;</span>
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-    `;
-    });
-
-    forecastElement.innerHTML = forecastHTML;
-}
-
 function displayCityWeather(city) {
     // calls function to display city name, display weather and display weather for 5 days ahead
     setCityTitle(city);
@@ -216,12 +236,13 @@ function useCurrentPosition(position) {
     let lat = position.coords.latitude;
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
     axios.get(apiUrl).then(displayCurrentWeather);
+    makeForecast(lat, lon);
 }
 
 function displayCurrentLocationWeather() {
     //recieves position data and calls useCurrentPosition for position data
     navigator.geolocation.getCurrentPosition(useCurrentPosition);
-    // setRealFiveDayCurrentLocationWeather();
+
 }
 
 // Current Location Button
@@ -243,4 +264,3 @@ radioFahrengeit.addEventListener("click", switchToFahrengeit.bind(null, tempCels
 //displayCurrentLocationWeather();
 setDateTime();
 displayCityWeather("Kharkiv");
-displayForecast();
