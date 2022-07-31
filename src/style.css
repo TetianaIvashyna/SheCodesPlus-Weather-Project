@@ -44,3 +44,11 @@
     font-family: 'Open Sans', sans-serif;
     font-size: small;
 }
+
+.forecast-date {
+    opacity: 0.5;
+}
+
+.min-forecast-temperature {
+    opacity: 0.5
+}
