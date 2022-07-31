@@ -1,6 +1,7 @@
 // Global variables that are used inside functions
 let tempCelsiusFloat = null;
 const apiKey = "1522ee297bdb323556a6c95f3b521f77";
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let temperature = document.querySelector("#temperature");
 
 //Celsius-Fahrenheit functions
@@ -30,7 +31,6 @@ function switchToFahrengeit() {
 // Date and Time functions
 function makeDate(now) {
     // makes Date string 
-    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let dayWeek = days[now.getDay()];
     let dayDate = now.getDate();
@@ -153,15 +153,20 @@ function setCityTitle(city) {
     cityName.innerHTML = city;
 }
 
+
+
 function displayForecast() {
     let forecastElement = document.querySelector("#forecast");
     let forecastHTML = ``;
+    let days5 = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"];
 
-    forecastHTML = forecastHTML + `            
+    days5.forEach(function (day) {
+
+        forecastHTML = forecastHTML + `            
     <div class="col">
                 <div class="card">
                     <div class="card-body center-align">
-                        <h5 class="card-title forecast-day">Dinsdag</h5>
+                        <h5 class="card-title forecast-day">${day}</h5>
                         <img id="clouds" src="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
                         <p class="card-text temperature-future">
                             <span class="max-forecast-temperature">19&deg;</span> <span
@@ -172,23 +177,7 @@ function displayForecast() {
                 </div>
             </div>
     `;
-
-    forecastHTML = forecastHTML + `            
-    <div class="col">
-                <div class="card">
-                    <div class="card-body center-align">
-                        <h5 class="card-title forecast-day">Dinsdag</h5>
-                        <img id="clouds" src="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
-                        <p class="card-text temperature-future">
-                            <span class="max-forecast-temperature">19&deg;</span> <span
-                                class="min-forecast-temperature">19&deg;</span>
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-    `;
-
+    });
 
     forecastElement.innerHTML = forecastHTML;
 }
