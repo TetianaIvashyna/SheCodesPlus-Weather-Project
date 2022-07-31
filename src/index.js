@@ -153,6 +153,25 @@ function setCityTitle(city) {
     cityName.innerHTML = city;
 }
 
+function displayForecast() {
+    let forecastElement = document.querySelector("#forecast");
+    forecastElement.innerHTML = `
+            <div class="col">
+                <div class="card">
+                    <div class="card-body center-align">
+                        <h5 class="card-title forecast-day">Vijdag</h5>
+                        <img id="clouds" src="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
+                        <p class="card-text temperature-future">
+                            <span class="max-forecast-temperature">19&deg;</span> <span
+                                class="min-forecast-temperature">19&deg;</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+    `;
+}
+
 function displayCityWeather(city) {
     // calls function to display city name, display weather and display weather for 5 days ahead
     setCityTitle(city);
@@ -214,3 +233,4 @@ radioFahrengeit.addEventListener("click", switchToFahrengeit.bind(null, tempCels
 //displayCurrentLocationWeather();
 setDateTime();
 displayCityWeather("Kharkiv");
+displayForecast();
