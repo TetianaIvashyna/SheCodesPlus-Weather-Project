@@ -155,11 +155,13 @@ function setCityTitle(city) {
 
 function displayForecast() {
     let forecastElement = document.querySelector("#forecast");
-    forecastElement.innerHTML = `
-            <div class="col">
+    let forecastHTML = ``;
+
+    forecastHTML = forecastHTML + `            
+    <div class="col">
                 <div class="card">
                     <div class="card-body center-align">
-                        <h5 class="card-title forecast-day">Vijdag</h5>
+                        <h5 class="card-title forecast-day">Dinsdag</h5>
                         <img id="clouds" src="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
                         <p class="card-text temperature-future">
                             <span class="max-forecast-temperature">19&deg;</span> <span
@@ -170,6 +172,25 @@ function displayForecast() {
                 </div>
             </div>
     `;
+
+    forecastHTML = forecastHTML + `            
+    <div class="col">
+                <div class="card">
+                    <div class="card-body center-align">
+                        <h5 class="card-title forecast-day">Dinsdag</h5>
+                        <img id="clouds" src="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
+                        <p class="card-text temperature-future">
+                            <span class="max-forecast-temperature">19&deg;</span> <span
+                                class="min-forecast-temperature">19&deg;</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+    `;
+
+
+    forecastElement.innerHTML = forecastHTML;
 }
 
 function displayCityWeather(city) {
