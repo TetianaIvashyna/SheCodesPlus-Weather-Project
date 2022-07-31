@@ -88,7 +88,9 @@ function displayWind(windSpeed) {
 function displayClouds(clouds) {
     // displays weather
     let cloudsSpan = document.querySelector("#clouds");
-    cloudsSpan.innerHTML = `${clouds}`;
+    cloudsSpan.setAttribute("src", `http://openweathermap.org/img/wn/${clouds.icon}@2x.png`);
+    cloudsSpan.setAttribute("alt", clouds.description);
+
 }
 
 function displayHumidity(humidity) {
@@ -102,7 +104,7 @@ function displayWeather(response) {
     displayRealCityTemperature(response.data.main.temp);
     displayVisibility(response.data.visibility);
     displayWind(response.data.wind.speed);
-    displayClouds(response.data.weather[0].main);
+    displayClouds(response.data.weather[0]);
     displayHumidity(response.data.main.humidity);
 }
 
